@@ -1,86 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useContext} from 'react';
+import NotFound from './pages/NotFound/NotFound';
+import {Navigate, Route,Routes} from "react-router-dom";
+import LandingPage from './pages/LandingPage/LandingPage';
+import DashBoard from './pages/DashBoard/DashBoard';
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Forms from "./pages/Forms/Forms";
 
-import TaskForm from './components/TaskForm';
-import Task from './components/Task';
 import './App.css';
+import { UserContext } from './context/user';
+import InsideFolder from './components/InsideFolder/InsideFolder';
 
 function App() {
-  const [tasks,setTasks] = useState([]);
+  const {setId}=useContext(UserContext);
 
   useEffect(()=>{
-    if(tasks.length ===0) return;
-    
-    localStorage.setItem("tasks",JSON.stringify(tasks));
-  },[tasks]);
-  
-  useEffect(()=>{
-    const tasks = JSON.parse(localStorage.getItem("tasks"));
-    if(tasks)
-    setTasks(tasks);
-  },[]);
-
-
-  function addTask(name){
-    console.log(tasks);
-    setTasks(prev=>{
-      return [...prev,{name:name,done:false}];
-    });
-
-  }
-
-  function removeTask(indexToRemove){
-    setTasks(prev=>{
-      return prev.filter((taskObject,index)=> index!== indexToRemove);
-    });
-  }
-
-  function updateTaskDone(taskIndex,newDone){
-    setTasks(prev=>{
-      const newTasks =[...prev];
-      newTasks[taskIndex].done=newDone;
-      return newTasks;
-    });
-  }
-
-  function renameTask(index,newName){
-    setTasks(prev=>{
-      const newTasks = [...prev];
-      newTasks[index].name=newName;
-      return newTasks;
-    })
-  }
-
-  const numberComplete = tasks.filter(t=>t.done).length;
-  const numberTotal = tasks.length;
-
-  function getMessage(){
-    const percentage = numberComplete/numberTotal*100;
-    if(percentage===0){
-      return "Try to do at least one!";
+    const token = localStorage.getItem('x-token');
+    if (token) {
+      // Hacer la petición fetch con el token
+      fetch("http://localhost:8080/user/gtme", {
+        headers: {
+          "Content-Type": "application/json",
+          "x-token": token
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Si la respuesta contiene el token, guardarlo en setId
+        if (data._id) {
+          setId(data._id);
+        }else {
+          setId("");
+          localStorage.removeItem("x-token");
+      }
+      })
+      .catch(error => {
+        console.error("Error en la petición:", error);
+      });
     }
-    if(percentage===100){
-      return "Nice job for today"
-    }
-    return "Keep it going"
-  }
-
+  },[setId])
   
   return (
-    <div className="app">
-      <div className='container'>
-        <div className='todo-list'>
-          <h1 className='todo-title'>{numberComplete}/{numberTotal} complete</h1>
-          <h2>{getMessage()}</h2>
-          <TaskForm onAdd={addTask}/>
-          {tasks.map((task,index)=>{
-            return(<Task {...task} 
-                          onRename={newName=> renameTask(index,newName)}
-                          onToggle={done=>updateTaskDone(index,done)}
-                          onTrash={()=>removeTask(index)}
-                    />)
-          })}
-        </div>
-      </div>
+    <div className="container">
+        <Routes>
+          <Route path='/' element={<LandingPage></LandingPage>}></Route>
+
+
+          <Route path='/forms' element={<Forms></Forms>}></Route>
+
+          <Route element={<PrivateRoute/>}>
+            <Route path='/dashboard' element={<DashBoard/>}>
+              <Route path='folder/:id' element={<InsideFolder/>}></Route>
+            </Route>
+          </Route>
+
+          <Route path='/NotFound' element={<NotFound/>}></Route>
+          <Route path='*' element={<Navigate to="/NotFound"></Navigate>}></Route>
+        </Routes>
     </div>
   );
 }
