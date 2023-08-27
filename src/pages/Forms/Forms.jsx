@@ -67,9 +67,37 @@ const LandingPage = () => {
     .then(data=>console.log(data))
   };
 
+  // useEffect(()=>{
+  //   const token = localStorage.getItem("x-token");
+  //   if(token){
+  //       fetch("http://localhost:8080/user/gtme",{
+  //           headers:{
+  //               "Content-Type": "application/json",
+  //               "x-token": token
+  //           }
+  //       })
+  //       .then(res=>res.json())
+  //       .then(data=>{
+  //           if(data._id){
+  //               setIsAuthenticated(true);
+  //               setLoading(false);
+  //           }
+  //           else {
+  //               setIsAuthenticated(false);
+  //               localStorage.removeItem("x-token");
+  //               setLoading(false);
+
+  //           }
+  //       })
+  //   }else{
+  //       setIsAuthenticated(false);
+  //       setLoading(false);
+  //   }
+  // },[actualizar]);
+
   return (
     <div className="landing-page">
-      {/* ... Otras secciones */}
+
       <div className="forms">
         <div className="login-form">
           <h2>Iniciar Sesión</h2>
@@ -121,7 +149,7 @@ const LandingPage = () => {
           </form>
         </div>
       </div>
-      {/* ... Pie de página y otros elementos */}
+    
     </div>
   );
 };

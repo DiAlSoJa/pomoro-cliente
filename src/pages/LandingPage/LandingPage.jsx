@@ -1,17 +1,10 @@
 import React from 'react';
+import "./LandingPage.css";
 
 const LandingPage = () => {
   return (
     <div className="landing-page">
-      <header>
-        <nav>
-          <ul>
-            <li><a href="/">Inicio</a></li>
-            <li><a href="/productos">Productos</a></li>
-            <li><a href="/contacto">Contacto</a></li>
-          </ul>
-        </nav>
-      </header>
+      
       <section className="hero-section">
         <h1>Título llamativo de tu producto</h1>
         <p>Descripción breve y convincente que destaque los beneficios.</p>

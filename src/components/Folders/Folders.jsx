@@ -69,16 +69,15 @@ const Folders = () => {
                 <i className="fa-solid fa-check" onClick={createFolder}></i>
                 <i className="fa-solid fa-x" onClick={()=>{setCrearFolder(false);setInputFolder("")}}></i>
             </>:""}
-            {folders.map((folder)=>{
-                return(<div key={folder._id}>
-                        {}
-                        <a href={"/dashboard/folder/"+folder._id}>
-                          <i className="fa-solid fa-folder"></i>
-                          <p>{folder.name}</p>
-                        </a>
-                        <IconWithOptions/>
-                    </div>)
-            })}
+            {folders.length===0?
+            <h2>No hay mazos / carpetas  todavia</h2>
+            :
+            folders.map((folder)=>{
+              return(<div key={folder._id}>
+                      <IconWithOptions id={folder._id} name={folder.name} setActualizar={setActualizar}/>
+                  </div>)
+                })}
+            
         </div>
      );
 }

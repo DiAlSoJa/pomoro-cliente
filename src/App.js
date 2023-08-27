@@ -5,7 +5,7 @@ import LandingPage from './pages/LandingPage/LandingPage';
 import DashBoard from './pages/DashBoard/DashBoard';
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import Forms from "./pages/Forms/Forms";
-
+import Header from './components/Header/Header';
 import './App.css';
 import { UserContext } from './context/user';
 import InsideFolder from './components/InsideFolder/InsideFolder';
@@ -41,6 +41,7 @@ function App() {
   
   return (
     <div className="container">
+        <Header/>
         <Routes>
           <Route path='/' element={<LandingPage></LandingPage>}></Route>
 
