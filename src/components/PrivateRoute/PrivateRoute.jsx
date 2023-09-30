@@ -1,13 +1,13 @@
 import { useEffect ,useState} from "react";
 import { Outlet,Navigate} from "react-router-dom";
 
-const PrivateRoute = () => {
+const PrivateRoute = ({url}) => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [verificar,setVerificar] = useState(false);
     useEffect(()=>{
         const token = localStorage.getItem("x-token");
         if(token){
-            fetch("http://localhost:8080/user/gtme",{
+            fetch(url+"user/gtme",{
                 headers:{
                     "Content-Type": "application/json",
                     "x-token": token
@@ -26,12 +26,15 @@ const PrivateRoute = () => {
 
                 }
             })
-            .catch(err=>console.log(err))
+            .catch(err=>{
+                console.log(err);
+                setVerificar(true);
+            });
         }else{
             setIsAuthenticated(false);
             setVerificar(true);
         }
-    },[]);
+    },[url]);
 
     
     if(verificar){

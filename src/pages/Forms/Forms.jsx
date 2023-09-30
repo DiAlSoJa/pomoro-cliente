@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { UserContext } from '../../context/user';
 
-const LandingPage = () => {
+const LandingPage = ({url}) => {
   const [loginForm, setLoginForm] = useState({
     email: '',
     password: '',
@@ -33,7 +33,7 @@ const LandingPage = () => {
 
   const handleLoginSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:8080/user/auth",{
+    fetch(url+"user/auth",{
       method: "POST",
       body: JSON.stringify(loginForm),
       headers: {
@@ -50,12 +50,13 @@ const LandingPage = () => {
         setLoginForm({email:"",password:""})
       }
     })
+    .catch(err=>console.log(err))
   };
 
   const handleRegistrationSubmit = (e) => {
     e.preventDefault();
     
-    fetch("http://localhost:8080/user/crus",{
+    fetch(url+"user/crus",{
       method: "POST",
       body: JSON.stringify(registrationForm),
       headers: {
